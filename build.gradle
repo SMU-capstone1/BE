@@ -32,6 +32,8 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+	//mail
+	implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
 
 	//user
 //	implementation 'com.google.code.findbugs:jsr305:3.0.2'

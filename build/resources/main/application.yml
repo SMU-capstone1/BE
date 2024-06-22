@@ -23,3 +23,17 @@ spring:
           auto: update
         default_batch_fetch_size: 1000
         globally_quoted_identifiers: true
+mail:
+  smtp:
+    host: smtp.gmail.com
+    auth: true
+    starttls:
+      required: true
+      enable: true
+    socketFactory:
+      fallback: false
+    port: 587
+    socketFactoryPort: 587
+  AdminMail:
+      id: gominchingu@gmail.com
+      password: ibjz alpg rhto caxf

@@ -38,4 +38,9 @@ public class UserConverter {
                 .role(RoleType.USER)
                 .build();
     }
+    public static UserResponseDTO.EmailSendRes toEmailSendRes(String code) {
+        return UserResponseDTO.EmailSendRes.builder()
+                .code(code)
+                .build();
+    }
 }
