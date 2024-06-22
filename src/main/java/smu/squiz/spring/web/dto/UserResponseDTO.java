@@ -31,4 +31,12 @@ public class UserResponseDTO {
         String tokenExpiresTime;
 
     }
+    //이메일
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EmailSendRes {
+        private String code;
+    }
 }

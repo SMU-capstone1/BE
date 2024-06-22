@@ -12,6 +12,7 @@ import smu.squiz.spring.apiPayload.GeneralException;
 import smu.squiz.spring.converter.UserConverter;
 import smu.squiz.spring.domain.User;
 import smu.squiz.spring.repository.UserRepository;
+import smu.squiz.spring.service.EmailService;
 import smu.squiz.spring.service.JwtTokenService;
 import smu.squiz.spring.service.UserService;
 import smu.squiz.spring.web.dto.TokenDTO;
@@ -30,6 +31,7 @@ public class UserRestController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final JwtTokenService jwtTokenService;
+    private final EmailService mailService;
 
     @PostMapping("/join")//회원가입
     @Operation(summary = "회원가입 API", description = "회원가입하는 API입니다.")
@@ -100,5 +102,29 @@ public class UserRestController {
     })
     public ApiResponse<String> deactivateUser(@RequestHeader(name = "atk") String atk, HttpServletRequest request) throws GeneralException {
         return ApiResponse.onSuccess(userService.deactivateUser(request));
+    }
+    @PostMapping("/mailSend")//이메일 인증 코드 전송
+    @Operation(summary = "이메일 인증 코드 전송 API", description = "이메일 인증 코드 전송하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+    })
+    @Parameters({})
+    public ApiResponse<UserResponseDTO.EmailSendRes> mailSend(@RequestBody @Valid UserRequestDTO.EmailSendReq emailDto) {
+        System.out.println("이메일 인증 요청이 들어옴");
+        System.out.println("이메일 인증 이메일 :" + emailDto.getEmail());
+
+        String code = mailService.joinEmail(emailDto.getEmail());
+        return ApiResponse.onSuccess(UserConverter.toEmailSendRes(code));
+    }
+    @PostMapping("/mailauthCheck")//이메일 코드 확인
+    @Operation(summary = "이메일 코드 확인 API", description = "이메일 코드 확인하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER4005", description = "UNAUTHORIZED, 인증 코드가 일치하지 않습니다."),
+    })
+    @Parameters({})
+    public ApiResponse<Void> mailauthCheck(@RequestBody @Valid UserRequestDTO.EmailSendCheckReq emailSendCheckReq) {
+        mailService.CheckAuthNum(emailSendCheckReq.getEmail(), emailSendCheckReq.getAuthNum());
+        return ApiResponse.onSuccess(null);
     }
 }
